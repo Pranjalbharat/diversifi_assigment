@@ -42,7 +42,7 @@ final List<Stock> mockStocks = [
     avgPrice: 1500,
     currentPrice: 1150,
     changes: {"day": -0.35, "week": 0.9, "month": 2.2},
-    priceHistory: [1500, 1490, 1505, 1510, 1525, 1540, 1550],
+    priceHistory: [1400, 1100, 1008, 1100, 1500, 1100, 1150],
     insight:
         "SBI Bank has seen gradual recovery driven by strong credit growth and improving asset quality.",
   ),

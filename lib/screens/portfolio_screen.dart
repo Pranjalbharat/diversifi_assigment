@@ -1,4 +1,5 @@
 import 'package:diversifi_assigment/dummy.dart';
+import 'package:diversifi_assigment/screens/stock_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:diversifi_assigment/provider/portfolio_provider.dart';
@@ -43,7 +44,7 @@ class PortfolioScreen extends StatelessWidget {
                       context.read<PortfolioProvider>().selectStock(stock);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => DummyScreen()),
+                        MaterialPageRoute(builder: (_) => StockDetailScreen()),
                       );
                     },
                     child: StockCard(index: index),

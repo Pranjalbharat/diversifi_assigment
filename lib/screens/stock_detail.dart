@@ -13,8 +13,6 @@ class StockDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PortfolioProvider>();
-
-    // 🔹 MediaQuery (single flag)
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 360;
 
@@ -62,7 +60,6 @@ class StockDetailScreen extends StatelessWidget {
             _changeValueCard(stock),
             SizedBox(height: isSmallScreen ? 12 : 15),
 
-            // 🔹 Responsive chart height
             SizedBox(
               height: isSmallScreen ? 200 : 220,
               child: PriceChartCard(stock: stock),
@@ -76,7 +73,6 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Company name
   Widget _header(Stock stock, bool isSmallScreen) {
     return Text(
       stock.companyName,
@@ -85,7 +81,6 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Price + PnL
   Widget _pnlSection(Stock stock, bool isSmallScreen) {
     final pnlValue = (stock.currentPrice - stock.avgPrice) * stock.qty;
 
@@ -120,7 +115,6 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Quantity / Avg / Current
   Widget _priceCard(Stock stock) {
     return InfoSummaryCard(
       items: [
@@ -143,7 +137,6 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Day / Week / Month
   Widget _changeValueCard(Stock stock) {
     return InfoSummaryCard(
       items: [

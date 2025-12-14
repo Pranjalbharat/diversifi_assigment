@@ -1,13 +1,15 @@
-import 'package:diversifi_assigment/data/model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:diversifi_assigment/data/model.dart';
+import 'package:diversifi_assigment/provider/portfolio_provider.dart';
 
 class StockCard extends StatelessWidget {
-  final Stock stock;
-
-  const StockCard({super.key, required this.stock});
+  final int index;
+  const StockCard({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
+    final stock = context.watch<PortfolioProvider>().stocks[index];
     final isProfit = stock.pnlPercentage >= 0;
 
     return Container(
@@ -19,12 +21,12 @@ class StockCard extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [_buildStockInfo(), _buildPnlSection(isProfit)],
+        children: [_buildStockInfo(stock), _buildPnlSection(stock, isProfit)],
       ),
     );
   }
 
-  _buildStockInfo() {
+  _buildStockInfo(Stock stock) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -58,7 +60,7 @@ class StockCard extends StatelessWidget {
     );
   }
 
-  _buildPnlSection(bool isProfit) {
+  _buildPnlSection(Stock stock, bool isProfit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [

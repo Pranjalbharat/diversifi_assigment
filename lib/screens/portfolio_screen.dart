@@ -1,11 +1,14 @@
+import 'package:diversifi_assigment/dummy.dart';
 import 'package:flutter/material.dart';
-import 'package:diversifi_assigment/data/mock_data.dart';
+import 'package:provider/provider.dart';
+import 'package:diversifi_assigment/provider/portfolio_provider.dart';
 import 'package:diversifi_assigment/widgets/stock_card.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final portfolio = context.watch<PortfolioProvider>();
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
@@ -26,14 +29,25 @@ class PortfolioScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _totValueWidget(),
+            _totValueWidget(portfolio.getPortfolioValue()),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.separated(
-                itemCount: mockStocks.length,
+                itemCount: portfolio.stocks.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  return StockCard(stock: mockStocks[index]);
+                  final stock = portfolio.stocks[index];
+
+                  return InkWell(
+                    onTap: () {
+                      context.read<PortfolioProvider>().selectStock(stock);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => DummyScreen()),
+                      );
+                    },
+                    child: StockCard(index: index),
+                  );
                 },
               ),
             ),
@@ -43,8 +57,7 @@ class PortfolioScreen extends StatelessWidget {
     );
   }
 
-  Widget _totValueWidget() {
-    final totalValue = getTotalPortfolioValue();
+  Widget _totValueWidget(double totalValue) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -74,13 +87,5 @@ class PortfolioScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  double getTotalPortfolioValue() {
-    double total = 0;
-    for (var stock in mockStocks) {
-      total += stock.qty * stock.currentPrice;
-    }
-    return total;
   }
 }

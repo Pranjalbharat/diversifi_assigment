@@ -34,4 +34,16 @@ final List<Stock> mockStocks = [
     insight:
         "HDFC Bank has seen gradual recovery driven by strong credit growth and improving asset quality.",
   ),
+
+  Stock(
+    symbol: "SBIBANK",
+    companyName: "SBI Bank Limited",
+    qty: 7,
+    avgPrice: 1500,
+    currentPrice: 1150,
+    changes: {"day": -0.35, "week": 0.9, "month": 2.2},
+    priceHistory: [1500, 1490, 1505, 1510, 1525, 1540, 1550],
+    insight:
+        "SBI Bank has seen gradual recovery driven by strong credit growth and improving asset quality.",
+  ),
 ];

@@ -22,10 +22,14 @@ class PortfolioScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text(
+        centerTitle: true,
+        title: Text(
           "Diversifi",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: isSmallScreen ? 20 : 28,
+          ),
         ),
       ),
       body: Padding(

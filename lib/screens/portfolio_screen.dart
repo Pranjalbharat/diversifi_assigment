@@ -7,12 +7,17 @@ import 'package:diversifi_assigment/widgets/stock_card.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final portfolio = context.watch<PortfolioProvider>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     if (portfolio.isLoading) {
       return const PortfolioScreenShimmer();
     }
+
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
@@ -23,24 +28,29 @@ class PortfolioScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
-
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _totValueWidget(portfolio.getPortfolioValue()),
-            const SizedBox(height: 20),
+            _totValueWidget(
+              context,
+              portfolio.getPortfolioValue(),
+              isSmallScreen,
+            ),
+            SizedBox(height: isSmallScreen ? 14 : 20),
             Expanded(
               child: ListView.separated(
                 itemCount: portfolio.stocks.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, __) =>
+                    SizedBox(height: isSmallScreen ? 8 : 12),
                 itemBuilder: (context, index) {
                   final stock = portfolio.stocks[index];
 
                   return InkWell(
                     onTap: () async {
                       context.read<PortfolioProvider>().selectStock(stock);
+
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           pageBuilder: (_, __, ___) =>
@@ -61,10 +71,18 @@ class PortfolioScreen extends StatelessWidget {
     );
   }
 
-  Widget _totValueWidget(double totalValue) {
+  Widget _totValueWidget(
+    BuildContext context,
+    double totalValue,
+    bool isSmallScreen,
+  ) {
+    final double titleFontSize = isSmallScreen ? 14 : 18;
+    final double valueFontSize = isSmallScreen ? 22 : 28;
+    final double padding = isSmallScreen ? 14 : 20;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
@@ -75,15 +93,15 @@ class PortfolioScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Total portfolio value",
-            style: TextStyle(fontSize: 18, color: Colors.white70),
+            style: TextStyle(fontSize: titleFontSize, color: Colors.white70),
           ),
           const SizedBox(height: 8),
           Text(
             "₹ ${totalValue.toStringAsFixed(2)}",
-            style: const TextStyle(
-              fontSize: 28,
+            style: TextStyle(
+              fontSize: valueFontSize,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

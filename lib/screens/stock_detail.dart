@@ -14,47 +14,60 @@ class StockDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<PortfolioProvider>();
 
+    // 🔹 MediaQuery (single flag)
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     if (provider.isLoading) {
       return const StockDetailScreenShimmer();
     }
+
     final stock = provider.selectedStock!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           stock.symbol,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: isSmallScreen ? 18 : 22,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+        padding: EdgeInsets.fromLTRB(
+          isSmallScreen ? 12 : 16,
+          0,
+          isSmallScreen ? 12 : 16,
+          0,
+        ),
         child: Column(
           children: [
-            _header(stock),
-            const SizedBox(height: 15),
+            _header(stock, isSmallScreen),
+            SizedBox(height: isSmallScreen ? 12 : 15),
 
-            _pnlSection(stock),
-            const SizedBox(height: 15),
+            _pnlSection(stock, isSmallScreen),
+            SizedBox(height: isSmallScreen ? 12 : 15),
 
             _priceCard(stock),
-            const SizedBox(height: 15),
+            SizedBox(height: isSmallScreen ? 12 : 15),
 
             _changeValueCard(stock),
-            const SizedBox(height: 15),
+            SizedBox(height: isSmallScreen ? 12 : 15),
 
-            PriceChartCard(stock: stock),
-            const SizedBox(height: 15),
+            // 🔹 Responsive chart height
+            SizedBox(
+              height: isSmallScreen ? 200 : 220,
+              child: PriceChartCard(stock: stock),
+            ),
+            SizedBox(height: isSmallScreen ? 12 : 15),
 
             AiInsightCard(insight: stock.insight),
           ],
@@ -63,14 +76,17 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _header(Stock stock) {
+  /// 🔹 Company name
+  Widget _header(Stock stock, bool isSmallScreen) {
     return Text(
       stock.companyName,
-      style: const TextStyle(fontSize: 22, color: Colors.white),
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: isSmallScreen ? 18 : 22, color: Colors.white),
     );
   }
 
-  Widget _pnlSection(Stock stock) {
+  /// 🔹 Price + PnL
+  Widget _pnlSection(Stock stock, bool isSmallScreen) {
     final pnlValue = (stock.currentPrice - stock.avgPrice) * stock.qty;
 
     final pnlPercent =
@@ -82,17 +98,18 @@ class StockDetailScreen extends StatelessWidget {
       children: [
         Text(
           "₹${stock.currentPrice.toStringAsFixed(2)}",
-          style: const TextStyle(
-            fontSize: 32,
+          style: TextStyle(
+            fontSize: isSmallScreen ? 26 : 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
+        const SizedBox(height: 4),
         Text(
           "${isPositive ? '+' : ''}${pnlPercent.toStringAsFixed(2)}% "
           "(₹${pnlValue.toStringAsFixed(2)})",
           style: TextStyle(
-            fontSize: 14,
+            fontSize: isSmallScreen ? 12 : 14,
             fontWeight: FontWeight.w600,
             color: isPositive
                 ? const Color(0xFF22C55E)
@@ -103,6 +120,7 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
+  /// 🔹 Quantity / Avg / Current
   Widget _priceCard(Stock stock) {
     return InfoSummaryCard(
       items: [
@@ -125,6 +143,7 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 
+  /// 🔹 Day / Week / Month
   Widget _changeValueCard(Stock stock) {
     return InfoSummaryCard(
       items: [

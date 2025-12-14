@@ -9,6 +9,15 @@ class PriceChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
+    final chartHeight = isSmallScreen ? 210.0 : 250.0;
+    final padding = isSmallScreen ? 12.0 : 16.0;
+    final radius = isSmallScreen ? 16.0 : 20.0;
+    final barWidth = isSmallScreen ? 2.5 : 3.0;
+    final bottomFontSize = isSmallScreen ? 9.0 : 10.0;
+
     final isPositive = stock.priceHistory.last >= stock.priceHistory.first;
 
     final lineColor = isPositive
@@ -16,9 +25,13 @@ class PriceChartCard extends StatelessWidget {
         : const Color(0xFFEF4444);
 
     return Container(
-      height: 250,
-      padding: const EdgeInsets.all(16),
-      decoration: _decoration(),
+      height: chartHeight,
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0F172A),
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: Colors.white.withOpacity(0.06)),
+      ),
       child: LineChart(
         LineChartData(
           gridData: FlGridData(show: false),
@@ -38,11 +51,11 @@ class PriceChartCard extends StatelessWidget {
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 0, right: 0),
+                    padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       stock.priceHistory[index].toStringAsFixed(0),
-                      style: const TextStyle(
-                        fontSize: 10,
+                      style: TextStyle(
+                        fontSize: bottomFontSize,
                         color: Colors.white54,
                       ),
                     ),
@@ -51,7 +64,6 @@ class PriceChartCard extends StatelessWidget {
               ),
             ),
           ),
-
           lineBarsData: [
             LineChartBarData(
               spots: stock.priceHistory
@@ -60,7 +72,7 @@ class PriceChartCard extends StatelessWidget {
                   .map((e) => FlSpot(e.key.toDouble(), e.value))
                   .toList(),
               isCurved: true,
-              barWidth: 3,
+              barWidth: barWidth,
               color: lineColor,
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
@@ -78,14 +90,6 @@ class PriceChartCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  BoxDecoration _decoration() {
-    return BoxDecoration(
-      color: const Color(0xFF0F172A),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: Colors.white.withOpacity(0.06)),
     );
   }
 }

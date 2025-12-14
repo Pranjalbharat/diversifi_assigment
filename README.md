@@ -1,16 +1,81 @@
-# diversifi_assigment
+# Diversifi – Flutter Portfolio App
 
-A new Flutter project.
+A Flutter-based portfolio application that displays stock data, performance metrics, and detailed insights with a clean and modern UI.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 How to Run the App
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
+- Flutter SDK installed
+- Android Studio / VS Code
+- Android emulator or physical device
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Steps
+- flutter pub get
+- flutter run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Make sure a device or emulator is running before executing the app.
+
+---
+
+## ✅ What I Implemented
+
+- Built two main screens:
+  - Portfolio Screen
+  - Stock Detail Screen
+- Displayed portfolio-level and stock-level financial data
+- Used local mock data structured like real API responses
+
+---
+
+## 🧠 Technical Decisions
+
+- Used Provider + ChangeNotifier for state management
+- Centralized stock data, selected stock, and loading state in PortfolioProvider
+- Separated UI into small, reusable widgets
+- Kept business logic outside UI widgets for clarity
+
+---
+
+## ✨ UX Enhancements
+
+- Implemented shimmer loading to simulate API loading states
+- Added smooth navigation without white flashes during screen transitions
+
+---
+
+## 📱 Responsiveness
+
+- Implemented basic responsiveness using MediaQuery
+- Adjusted:
+  - Font sizes
+  - Padding and spacing
+  - Card sizes and chart height
+- Focused only on key UI elements to avoid overengineering
+
+---
+
+## 📈 Charts & Visuals
+
+- Used fl_chart for price history visualization
+- Chart color adapts dynamically:
+  - Green for positive trend
+  - Red for negative trend
+- Added gradient fill below the line for better visual clarity
+
+---
+
+## 🎯 Overall Outcome
+
+- Clean and readable UI
+- Smooth user experience
+- Modular and scalable code structure
+
+---
+
+## 📝 Notes
+
+- Data is currently loaded from local models
+- Shimmer loading simulates real-world network behavior
+- The project is structured to easily support API integration in the future

@@ -1,9 +1,10 @@
+import 'package:diversifi_assigment/shimmers/stock_detail_screen_shimmer.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:diversifi_assigment/data/model.dart';
 import 'package:diversifi_assigment/widgets/ai_insight_card.dart';
 import 'package:diversifi_assigment/widgets/info_card.dart';
 import 'package:diversifi_assigment/widgets/price_chart_card.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:diversifi_assigment/provider/portfolio_provider.dart';
 
 class StockDetailScreen extends StatelessWidget {
@@ -11,11 +12,12 @@ class StockDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stock = context.watch<PortfolioProvider>().selectedStock;
-    if (stock == null) {
-      return const Scaffold(body: Center(child: Text("No stock selected")));
-    }
+    final provider = context.watch<PortfolioProvider>();
 
+    if (provider.isLoading) {
+      return const StockDetailScreenShimmer();
+    }
+    final stock = provider.selectedStock!;
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
@@ -31,7 +33,7 @@ class StockDetailScreen extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 22,
           ),
         ),
       ),
@@ -45,48 +47,15 @@ class StockDetailScreen extends StatelessWidget {
             _pnlSection(stock),
             const SizedBox(height: 15),
 
-            InfoSummaryCard(
-              items: [
-                InfoItem(
-                  label: "Quantity:",
-                  value: stock.qty.toString(),
-                  valueColor: Colors.white,
-                ),
-                InfoItem(
-                  label: "Avg Price:",
-                  value: "₹${stock.avgPrice.toStringAsFixed(0)}",
-                  valueColor: Colors.white,
-                ),
-                InfoItem(
-                  label: "Current Price:",
-                  value: "₹${stock.currentPrice.toStringAsFixed(0)}",
-                  valueColor: Colors.white,
-                ),
-              ],
-            ),
+            _priceCard(stock),
             const SizedBox(height: 15),
 
-            InfoSummaryCard(
-              items: [
-                InfoItem(
-                  label: "Day:",
-                  value: "${stock.changes['day']!.toStringAsFixed(1)}%",
-                ),
-                InfoItem(
-                  label: "Week:",
-                  value: "${stock.changes['week']!.toStringAsFixed(1)}%",
-                ),
-                InfoItem(
-                  label: "Month:",
-                  value: "${stock.changes['month']!.toStringAsFixed(1)}%",
-                ),
-              ],
-            ),
-
+            _changeValueCard(stock),
             const SizedBox(height: 15),
+
             PriceChartCard(stock: stock),
-
             const SizedBox(height: 15),
+
             AiInsightCard(insight: stock.insight),
           ],
         ),
@@ -119,7 +88,6 @@ class StockDetailScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 6),
         Text(
           "${isPositive ? '+' : ''}${pnlPercent.toStringAsFixed(2)}% "
           "(₹${pnlValue.toStringAsFixed(2)})",
@@ -130,6 +98,47 @@ class StockDetailScreen extends StatelessWidget {
                 ? const Color(0xFF22C55E)
                 : const Color(0xFFEF4444),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _priceCard(Stock stock) {
+    return InfoSummaryCard(
+      items: [
+        InfoItem(
+          label: "Quantity:",
+          value: stock.qty.toString(),
+          valueColor: Colors.white,
+        ),
+        InfoItem(
+          label: "Avg Price:",
+          value: "₹${stock.avgPrice.toStringAsFixed(0)}",
+          valueColor: Colors.white,
+        ),
+        InfoItem(
+          label: "Current Price:",
+          value: "₹${stock.currentPrice.toStringAsFixed(0)}",
+          valueColor: Colors.white,
+        ),
+      ],
+    );
+  }
+
+  Widget _changeValueCard(Stock stock) {
+    return InfoSummaryCard(
+      items: [
+        InfoItem(
+          label: "Day:",
+          value: "${stock.changes['day']!.toStringAsFixed(1)}%",
+        ),
+        InfoItem(
+          label: "Week:",
+          value: "${stock.changes['week']!.toStringAsFixed(1)}%",
+        ),
+        InfoItem(
+          label: "Month:",
+          value: "${stock.changes['month']!.toStringAsFixed(1)}%",
         ),
       ],
     );

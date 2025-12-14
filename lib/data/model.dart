@@ -19,13 +19,6 @@ class Stock {
     required this.insight,
   });
 
-  // double get investedValue => qty * avgPrice;
-
-  // double get currentValue => qty * currentPrice;
-
-  // double get pnlPercent =>
-  //     ((currentValue - investedValue) / investedValue) * 100;
-
   double get pnlPercentage {
     if (avgPrice == 0) return 0.0;
     return ((currentPrice - avgPrice) / avgPrice) * 100;

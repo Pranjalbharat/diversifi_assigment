@@ -1,7 +1,7 @@
-import 'package:diversifi_assigment/dummy.dart';
-import 'package:diversifi_assigment/screens/stock_detail.dart';
+import 'package:diversifi_assigment/shimmers/portfolio_screen_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:diversifi_assigment/screens/stock_detail.dart';
 import 'package:diversifi_assigment/provider/portfolio_provider.dart';
 import 'package:diversifi_assigment/widgets/stock_card.dart';
 
@@ -10,18 +10,17 @@ class PortfolioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final portfolio = context.watch<PortfolioProvider>();
+    if (portfolio.isLoading) {
+      return const PortfolioScreenShimmer();
+    }
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0,
         title: const Text(
           "Diversifi",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-            color: Colors.white,
-          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
 
@@ -40,11 +39,15 @@ class PortfolioScreen extends StatelessWidget {
                   final stock = portfolio.stocks[index];
 
                   return InkWell(
-                    onTap: () {
+                    onTap: () async {
                       context.read<PortfolioProvider>().selectStock(stock);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => StockDetailScreen()),
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) =>
+                              const StockDetailScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
                       );
                     },
                     child: StockCard(index: index),

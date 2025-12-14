@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       create: (_) => PortfolioProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+
         home: PortfolioScreen(),
       ),
     );

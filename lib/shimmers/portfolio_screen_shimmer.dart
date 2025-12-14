@@ -11,12 +11,14 @@ class PortfolioScreenShimmer extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true,
         title: const Text(
           "Diversifi",
           style: TextStyle(
             fontWeight: FontWeight.w600,
             letterSpacing: 0.4,
             color: Colors.white,
+            fontSize: 24,
           ),
         ),
       ),
